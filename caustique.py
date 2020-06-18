@@ -10,15 +10,15 @@ def init(args=[], ds=1):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", type=str, default='2020-06-18_caustique', help="Tag")
-    parser.add_argument("--nx", type=int, default=1500//ds, help="number of pixels (vertical)")
-    parser.add_argument("--ny", type=int, default=2400//ds, help="number of pixels (horizontal)")
+    parser.add_argument("--nx", type=int, default=5*2**8//ds, help="number of pixels (vertical)")
+    parser.add_argument("--ny", type=int, default=8*2**8//ds, help="number of pixels (horizontal)")
     parser.add_argument("--bin_dens", type=int, default=2, help="relative bin density")
-    parser.add_argument("--nframe", type=int, default=120, help="number of frames")
+    parser.add_argument("--nframe", type=int, default=2**7, help="number of frames")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
     parser.add_argument("--H", type=float, default=125., help="depth")
     parser.add_argument("--sf_0", type=float, default=0.002, help="sf")
     parser.add_argument("--B_sf", type=float, default=0.001, help="bandwidth in sf")
-    parser.add_argument("--V_Y", type=float, default=0.0, help="horizontal speed")
+    parser.add_argument("--V_Y", type=float, default=0.5, help="horizontal speed")
     parser.add_argument("--V_X", type=float, default=0.5, help="vertical speed")
     parser.add_argument("--B_V", type=float, default=2.0, help="bandwidth in speed")
     parser.add_argument("--theta", type=float, default=np.pi/2, help="angle with the horizontal")
@@ -81,17 +81,19 @@ class Caustique:
             os.makedirs(f'/tmp/{self.opt.tag}', exist_ok=True)
             gifname=f'{self.opt.tag}/{self.opt.tag}.gif'
         binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
+        # edge_x, edge_y = np.linspace(0, 1, binsx+1, endpoint=True), np.linspace(0, self.ratio, binsy+1, endpoint=True)
         hist = np.zeros((binsx, binsy, self.opt.nframe))
         for i_frame in range(self.opt.nframe):
             xv, yv = self.transform(z[:, :, i_frame])
-            hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(), bins=[binsx, binsy], density=True)
+            hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(), 
+                                                                 bins=[binsx, binsy], range=[[0, 1], [0, self.ratio]], density=True)
 
         hist /= hist.max()
         subplotpars = matplotlib.figure.SubplotParams(left=0., right=1., bottom=0., top=1., wspace=0., hspace=0.,)
         fnames = []
         for i_frame in range(self.opt.nframe):
             fig, ax = plt.subplots(figsize=(binsy/dpi, binsx/dpi), subplotpars=subplotpars)
-            ax.pcolormesh(edge_x, edge_y, hist[:, :, i_frame].T, vmin=0, vmax=1, cmap=plt.cm.Blues_r)
+            ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
             fname = f'/tmp/{gifname}_frame_{i_frame}.png'
             fig.savefig(fname, dpi=dpi)
             fnames.append(fname)
