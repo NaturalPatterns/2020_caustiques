@@ -12,6 +12,8 @@ This is joint work with artist [Etienne Rey](https://laurentperrinet.github.io/a
 
 ## installation
 
+Install [dependencies](https://pip.pypa.io/en/stable/user_guide/#requirements-files), then this library:
+
 ```
 python3 -m pip install -r requirements.txt
 python3 -m pip install -e .
