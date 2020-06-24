@@ -1,3 +1,6 @@
+# https://pip.pypa.io/en/stable/user_guide/#requirements-files
+# use it to install dependencies with
+# `pip install -r requirements.txt`
 matplotlib
 numpy
 MotionClouds
