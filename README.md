@@ -4,7 +4,11 @@ Caustics ([wikipedia](https://en.wikipedia.org/wiki/Caustic_(optics))) are lumin
 
 In [this post](https://laurentperrinet.github.io/sciblog/posts/2020-06-19-caustic-optics.html), I will develop a simple formalism to generate such patterns, with the paradoxical result that it is *very* simple to code yet generates patterns with great complexity, such as:
 
-![sciblog](https://laurentperrinet.github.io/sciblog/files/2020-06-19_caustique/2020-06-19_caustique.gif)
+<BR>
+<center>
+<img src="caustique.gif" width=61.8%/>
+</center>
+<BR>
 
 This is joint work with artist [Etienne Rey](https://laurentperrinet.github.io/authors/etienne-rey/), in which I especially follow the ideas put forward in the series [Turbulence](http://ondesparalleles.org/projets/turbulences/).
 
@@ -18,4 +22,17 @@ python3 -m pip install -e .
 ```
 ## running it
 
-Launch [jupyter](https://jupyter.org/).
+```
+from caustique import init
+opt = init()
+opt.bin_dens = 8
+
+from caustique import Caustique
+c = Caustique(opt)
+z = c.wave()
+gifname = c.plot(z)
+```
+
+## exploring more
+
+Launch [jupyter](https://jupyter.org/) and open the notebook.

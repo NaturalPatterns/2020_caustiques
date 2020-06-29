@@ -10,7 +10,7 @@ def init(args=[], ds=1):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", type=str, default='caustique', help="Tag")
-    parser.add_argument("--figpath", type=str, default='2020-06-19_caustique', help="Folder to store images")
+    parser.add_argument("--figpath", type=str, default='.', help="Folder to store images")
     parser.add_argument("--nx", type=int, default=5*2**8, help="number of pixels (vertical)")
     parser.add_argument("--ny", type=int, default=8*2**8, help="number of pixels (horizontal)")
     parser.add_argument("--bin_dens", type=int, default=4, help="relative bin density")
@@ -48,11 +48,11 @@ def make_gif(gifname, fnames, fps):
 class Caustique:
     def __init__(self, opt):
         """
-        Image coordinates follow 'ij' indexing, that is, 
-        * their origin at the top left, 
+        Image coordinates follow 'ij' indexing, that is,
+        * their origin at the top left,
         * the X axis is vertical and goes "down",
         * the Y axis is horizontal and goes "right".
-        
+
         """
         self.ratio = opt.ny/opt.nx # ratio between height and width (>1 for portrait, <1 for landscape)
         X = np.linspace(0, 1, opt.nx, endpoint=False) # vertical
@@ -67,14 +67,14 @@ class Caustique:
         import MotionClouds as mc
         fx, fy, ft = mc.get_grids(self.opt.nx, self.opt.ny, self.opt.nframe)
         env = mc.envelope_gabor(fx, fy, ft, V_X=self.opt.V_Y, V_Y=self.opt.V_X, B_V=self.opt.B_V,
-                                sf_0=self.opt.sf_0, B_sf=self.opt.B_sf, 
+                                sf_0=self.opt.sf_0, B_sf=self.opt.B_sf,
                                 theta=self.opt.theta, B_theta=self.opt.B_theta)
         z = mc.rectif(mc.random_cloud(env, seed=self.opt.seed))
         return z
 
     def transform(self, z_):
         xv, yv = self.xv.copy(), self.yv.copy()
-        
+
         dzdx = z_ - np.roll(z_, 1, axis=0)
         dzdy = z_ - np.roll(z_, 1, axis=1)
         xv = xv + self.opt.H * dzdx
@@ -94,9 +94,9 @@ class Caustique:
         hist = np.zeros((binsx, binsy, self.opt.nframe))
         for i_frame in range(self.opt.nframe):
             xv, yv = self.transform(z[:, :, i_frame])
-            hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(), 
-                                                                 bins=[binsx, binsy], 
-                                                                 range=[[0, 1], [0, self.ratio]], 
+            hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
+                                                                 bins=[binsx, binsy],
+                                                                 range=[[0, 1], [0, self.ratio]],
                                                                  density=True)
 
         hist /= hist.max()
