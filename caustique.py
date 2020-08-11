@@ -10,7 +10,7 @@ def init(args=[], ds=1):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", type=str, default='caustique', help="Tag")
-    parser.add_argument("--figpath", type=str, default='.', help="Folder to store images")
+    parser.add_argument("--figpath", type=str, default='2020-08-11', help="Folder to store images")
     parser.add_argument("--nx", type=int, default=5*2**8, help="number of pixels (vertical)")
     parser.add_argument("--ny", type=int, default=8*2**8, help="number of pixels (horizontal)")
     parser.add_argument("--bin_dens", type=int, default=4, help="relative bin density")
@@ -25,6 +25,7 @@ def init(args=[], ds=1):
     parser.add_argument("--theta", type=float, default=2*np.pi*(2-1.61803), help="angle with the horizontal")
     parser.add_argument("--B_theta", type=float, default=np.pi/12, help="bandwidth in theta")
     parser.add_argument("--fps", type=float, default=18, help="bandwidth in theta")
+    parser.add_argument("--cache", type=bool, default=True, help="Cache intermediate output.")
     parser.add_argument("--verbose", type=bool, default=False, help="Displays more verbose output.")
 
     opt = parser.parse_args(args=args)
@@ -61,6 +62,7 @@ class Caustique:
         self.opt = opt
         # https://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
         self.d = vars(opt)
+        os.makedirs(self.opt.figpath, exist_ok=True)
 
     def wave(self):
         # A simplistic model of a wave using https://github.com/NeuralEnsemble/MotionClouds
@@ -87,7 +89,6 @@ class Caustique:
 
     def plot(self, z, gifname=None, dpi=150):
         if gifname is None:
-            os.makedirs(self.opt.figpath, exist_ok=True)
             gifname=f'{self.opt.figpath}/{self.opt.tag}.gif'
         binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
 
@@ -104,7 +105,10 @@ class Caustique:
         fnames = []
         for i_frame in range(self.opt.nframe):
             fig, ax = plt.subplots(figsize=(binsy/dpi, binsx/dpi), subplotpars=subplotpars)
-            ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
+            bluesky = np.array([0.488779, 0.672615, 1.      ])
+            # ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
+            ax.imshow(hist[:, :, i_frame][:, :, None]*bluesky[None, None, :], vmin=0, vmax=1)
+
             fname = f'/tmp/{self.opt.tag}_frame_{i_frame}.png'
             fig.savefig(fname, dpi=dpi)
             fnames.append(fname)
