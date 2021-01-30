@@ -66,6 +66,7 @@ class Caustique:
         self.d = vars(opt)
         os.makedirs(self.opt.figpath, exist_ok=True)
         self.cachepath = os.path.join('/tmp', self.opt.figpath)
+        if opt.verbose: print(f'{self.cachepath=}')
         os.makedirs(self.cachepath, exist_ok=True)
 
         # a standard white:
@@ -142,7 +143,7 @@ class Caustique:
             
             ax.imshow(image_L[:, :, None]*image_rgb, vmin=0, vmax=1)
 
-            fname = f'{self.cachepath}/{self.opt.tag}_frame_{i_frame}.png'
+            fname = f'{self.cachepath}/{self.opt.tag}_frame_{i_frame:04d}.png'
             fig.savefig(fname, dpi=dpi)
             fnames.append(fname)
             plt.close('all')
@@ -349,3 +350,19 @@ class ColourSystem:
 
         xyz = self.spec_to_xyz(spec)
         return self.xyz_to_rgb(xyz, out_fmt)
+
+if __name__ == "__main__":
+    import datetime
+    date = datetime.datetime.now().date().isoformat()
+    figpath = f'{date}_caustique'
+    print(f'Saving our simulations in={figpath}')
+    
+    opt = init()
+    opt.figpath = figpath
+    opt.verbose = True
+
+    c = Caustique(opt)
+    z = c.wave()
+    
+    gifname = c.plot(z)
+    
