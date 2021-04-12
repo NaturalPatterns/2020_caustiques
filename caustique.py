@@ -36,7 +36,7 @@ def init(args=[], ds=1):
         print(opt)
     return opt
 
-def make_gif(gifname, fnames, fps):
+def make_gif(gifname, fnames, fps, do_delete=False):
     import imageio
 
     with imageio.get_writer(gifname, mode='I', fps=fps) as writer:
@@ -45,6 +45,8 @@ def make_gif(gifname, fnames, fps):
 
     from pygifsicle import optimize
     optimize(str(gifname))
+    if do_delete: 
+        for fname in fnames: os.remove(fname)
     return gifname
 
 
