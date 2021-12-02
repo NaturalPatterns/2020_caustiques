@@ -6,16 +6,16 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 
-def init(args=[], ds=1):
+def init(args=[], PRECISION=7):
     import argparse
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", type=str, default='caustique', help="Tag")
     parser.add_argument("--figpath", type=str, default='2020-08-11', help="Folder to store images")
-    parser.add_argument("--nx", type=int, default=5*2**8, help="number of pixels (vertical)")
-    parser.add_argument("--ny", type=int, default=8*2**8, help="number of pixels (horizontal)")
+    parser.add_argument("--nx", type=int, default=5*2**PRECISION, help="number of pixels (vertical)")
+    parser.add_argument("--ny", type=int, default=8*2**PRECISION, help="number of pixels (horizontal)")
+    parser.add_argument("--nframe", type=int, default=5*2**PRECISION, help="number of frames")
     parser.add_argument("--bin_dens", type=int, default=4, help="relative bin density")
-    parser.add_argument("--nframe", type=int, default=2**7, help="number of frames")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
     parser.add_argument("--H", type=float, default=10., help="depth of the pool")
     parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
@@ -24,9 +24,9 @@ def init(args=[], ds=1):
     parser.add_argument("--V_X", type=float, default=0.3, help="vertical speed")
     parser.add_argument("--B_V", type=float, default=4.0, help="bandwidth in speed")
     parser.add_argument("--theta", type=float, default=2*np.pi*(2-1.61803), help="angle with the horizontal")
-    parser.add_argument("--B_theta", type=float, default=np.pi/8, help="bandwidth in theta")
+    parser.add_argument("--B_theta", type=float, default=np.pi/3, help="bandwidth in theta")
     parser.add_argument("--min_lum", type=float, default=.2, help="diffusion level for the rendering")
-    parser.add_argument("--fps", type=float, default=18, help="bandwidth in theta")
+    parser.add_argument("--fps", type=float, default=18, help="frames per second")
     parser.add_argument("--cache", type=bool, default=True, help="Cache intermediate output.")
     parser.add_argument("--verbose", type=bool, default=False, help="Displays more verbose output.")
 
@@ -107,7 +107,7 @@ class Caustique:
 
         return xv, yv
 
-    def plot(self, z, gifname=None, dpi=150):
+    def plot(self, z, do_color=True, gifname=None, dpi=150):
         if gifname is None:
             gifname=f'{self.opt.figpath}/{self.opt.tag}.gif'
 
@@ -130,20 +130,24 @@ class Caustique:
         fnames = []
         for i_frame in range(self.opt.nframe):
             fig, ax = plt.subplots(figsize=(binsy/dpi, binsx/dpi), subplotpars=subplotpars)
-            bluesky = np.array([0.268375, 0.283377]) # xyz
-            sun = np.array([0.325998, 0.335354]) # xyz
-            # ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
-            # https://en.wikipedia.org/wiki/CIE_1931_color_space#Mixing_colors_specified_with_the_CIE_xy_chromaticity_diagram
-            L1 = 1 - hist[:, :, i_frame]
-            L2 = hist[:, :, i_frame]
-            image_denom = L1 / bluesky[1] + L2 / sun[1]            
-            image_x = (L1 * bluesky[0] / bluesky[1] + L2 * sun[0] / sun[1]) / image_denom
-            image_y = (L1 + L2) / image_denom 
-            image_xyz = np.dstack((image_x, image_y, 1 - image_x - image_y))
-            image_rgb = self.cs_srgb.xyz_to_rgb(image_xyz)
-            image_L = self.opt.min_lum + (1-self.opt.min_lum)* L2 ** .61803
+            if do_color:
+                bluesky = np.array([0.268375, 0.283377]) # xyz
+                sun = np.array([0.325998, 0.335354]) # xyz
+                # ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
+                # https://en.wikipedia.org/wiki/CIE_1931_color_space#Mixing_colors_specified_with_the_CIE_xy_chromaticity_diagram
+                L1 = 1 - hist[:, :, i_frame]
+                L2 = hist[:, :, i_frame]
+                image_denom = L1 / bluesky[1] + L2 / sun[1]            
+                image_x = (L1 * bluesky[0] / bluesky[1] + L2 * sun[0] / sun[1]) / image_denom
+                image_y = (L1 + L2) / image_denom 
+                image_xyz = np.dstack((image_x, image_y, 1 - image_x - image_y))
+                image_rgb = self.cs_srgb.xyz_to_rgb(image_xyz)
+                image_L = self.opt.min_lum + (1-self.opt.min_lum)* L2 ** .61803
             
-            ax.imshow(image_L[:, :, None]*image_rgb, vmin=0, vmax=1)
+                ax.imshow(image_L[:, :, None]*image_rgb, vmin=0, vmax=1)
+
+            else:
+                ax.imshow(1-image_L, vmin=0, vmax=1)
 
             fname = f'{self.cachepath}/{self.opt.tag}_frame_{i_frame:04d}.png'
             fig.savefig(fname, dpi=dpi)
