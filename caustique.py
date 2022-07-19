@@ -28,6 +28,7 @@ def init(args=[], ds=1, PRECISION=7):
     parser.add_argument("--B_theta", type=float, default=np.pi/3, help="bandwidth in theta")
     parser.add_argument("--min_lum", type=float, default=.2, help="diffusion level for the rendering")
     parser.add_argument("--fps", type=float, default=18, help="frames per second")
+    parser.add_argument("--multispectral", type=bool, default=True, help="Compute caustics on the full spectrogram.")
     parser.add_argument("--cache", type=bool, default=True, help="Cache intermediate output.")
     parser.add_argument("--verbose", type=bool, default=False, help="Displays more verbose output.")
 
@@ -95,59 +96,90 @@ class Caustique:
             if self.opt.cache: np.save(filename, z)
         return z
 
-    def transform(self, z_):
+    def transform(self, z_, modulation=1.):
         xv, yv = self.xv.copy(), self.yv.copy()
 
         dzdx = z_ - np.roll(z_, 1, axis=0)
         dzdy = z_ - np.roll(z_, 1, axis=1)
-        xv = xv + self.opt.H * dzdx
-        yv = yv + self.opt.H * dzdy
+        xv = xv + modulation*self.opt.H * dzdx
+        yv = yv + modulation*self.opt.H * dzdy
 
         xv = np.mod(xv, 1)
         yv = np.mod(yv, self.ratio)
 
         return xv, yv
 
-    def plot(self, z, do_color=True, gifname=None, dpi=150):
-        if gifname is None:
-            gifname=f'{self.opt.figpath}/{self.opt.tag}.gif'
+    def do_raytracing(self, z):
         filename = f'{self.cachepath}/{self.opt.tag}_hist.npy'
-
         binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
         if self.opt.cache and os.path.isfile(filename):
             hist = np.load(filename)
         else:
-            hist = np.zeros((binsx, binsy, self.opt.nframe))
-            for i_frame in range(self.opt.nframe):
-                xv, yv = self.transform(z[:, :, i_frame])
-                hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
-                                                                     bins=[binsx, binsy],
-                                                                     range=[[0, 1], [0, self.ratio]],
-                                                                     density=True)
-            hist /= hist.max()
+            if self.opt.multispectral:
+                N_wavelengths = len(self.cs_srgb.cmf[:, 0])
+
+                # http://www.philiplaven.com/p20.html
+                # 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation
+                variation = .02
+                
+                hist = np.zeros((binsx, binsy, N_wavelengths, self.opt.nframe))
+                for i_wavelength in range(N_wavelengths):
+                    for i_frame in range(self.opt.nframe):
+                        xv, yv = self.transform(z[:, :, i_frame], modulation=1. - variation*i_wavelength/N_wavelengths)
+                        hist[:, :, i_wavelength, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
+                                                                             bins=[binsx, binsy],
+                                                                             range=[[0, 1], [0, self.ratio]],
+                                                                             density=True)
+                hist /= hist.max()
+            else:
+                hist = np.zeros((binsx, binsy, self.opt.nframe))
+                for i_frame in range(self.opt.nframe):
+                    xv, yv = self.transform(z[:, :, i_frame])
+                    hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
+                                                                         bins=[binsx, binsy],
+                                                                         range=[[0, 1], [0, self.ratio]],
+                                                                         density=True)
+                hist /= hist.max()
             if self.opt.cache: np.save(filename, hist)
+        return hist
+    
+
+    def plot(self, z, do_color=True, gifname=None, dpi=150):
+        hist = self.do_raytracing(z)
+        
+        if gifname is None:
+            gifname=f'{self.opt.figpath}/{self.opt.tag}.gif'
 
         subplotpars = matplotlib.figure.SubplotParams(left=0., right=1., bottom=0., top=1., wspace=0., hspace=0.,)
+
+        if self.opt.multispectral:
+            # TODO : multiply by the spectrum of the sky 
+            hist /= hist.max(axis=2)
+
         fnames = []
         for i_frame in range(self.opt.nframe):
             fig, ax = plt.subplots(figsize=(binsy/dpi, binsx/dpi), subplotpars=subplotpars)
-            if do_color:
-                bluesky = np.array([0.268375, 0.283377]) # xyz
-                sun = np.array([0.325998, 0.335354]) # xyz
-                # ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
-                # https://en.wikipedia.org/wiki/CIE_1931_color_space#Mixing_colors_specified_with_the_CIE_xy_chromaticity_diagram
-                L1 = 1 - hist[:, :, i_frame]
-                L2 = hist[:, :, i_frame]
-                image_denom = L1 / bluesky[1] + L2 / sun[1]
-                image_x = (L1 * bluesky[0] / bluesky[1] + L2 * sun[0] / sun[1]) / image_denom
-                image_y = (L1 + L2) / image_denom 
-                image_xyz = np.dstack((image_x, image_y, 1 - image_x - image_y))
-                image_rgb = self.cs_srgb.xyz_to_rgb(image_xyz)
-                image_L = self.opt.min_lum + (1-self.opt.min_lum)* L2 ** .61803
-                ax.imshow(image_L[:, :, None]*image_rgb, vmin=0, vmax=1)
-
+            if self.opt.multispectral:
+                image_rgb = self.cs_srgb.spec_to_rgb(hist[:, :, :, i_frame])
+                ax.imshow(image_rgb, vmin=0, vmax=1)
             else:
-                ax.imshow(1-image_L, vmin=0, vmax=1)
+                if do_color:
+                    bluesky = np.array([0.268375, 0.283377]) # xyz
+                    sun = np.array([0.325998, 0.335354]) # xyz
+                    # ax.pcolormesh(edge_y, edge_x, hist[:, :, i_frame], vmin=0, vmax=1, cmap=plt.cm.Blues_r)
+                    # https://en.wikipedia.org/wiki/CIE_1931_color_space#Mixing_colors_specified_with_the_CIE_xy_chromaticity_diagram
+                    L1 = 1 - hist[:, :, i_frame]
+                    L2 = hist[:, :, i_frame]
+                    image_denom = L1 / bluesky[1] + L2 / sun[1]
+                    image_x = (L1 * bluesky[0] / bluesky[1] + L2 * sun[0] / sun[1]) / image_denom
+                    image_y = (L1 + L2) / image_denom 
+                    image_xyz = np.dstack((image_x, image_y, 1 - image_x - image_y))
+                    image_rgb = self.cs_srgb.xyz_to_rgb(image_xyz)
+                    image_L = self.opt.min_lum + (1-self.opt.min_lum)* L2 ** .61803
+                    ax.imshow(image_L[:, :, None]*image_rgb, vmin=0, vmax=1)
+
+                else:
+                    ax.imshow(1-image_L, vmin=0, vmax=1)
 
             fname = f'{self.cachepath}/{self.opt.tag}_frame_{i_frame:04d}.png'
             fig.savefig(fname, dpi=dpi)
