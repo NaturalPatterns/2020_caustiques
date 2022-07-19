@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 import os
+import datetime
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
-
-def init(args=[], PRECISION=7):
+def init(args=[], ds=1, PRECISION=7):
     import argparse
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", type=str, default='caustique', help="Tag")
-    parser.add_argument("--figpath", type=str, default='2020-08-11', help="Folder to store images")
+    parser.add_argument("--figpath", type=str, default='2021-12-01', help="Folder to store images")
     parser.add_argument("--nx", type=int, default=5*2**PRECISION, help="number of pixels (vertical)")
     parser.add_argument("--ny", type=int, default=8*2**PRECISION, help="number of pixels (horizontal)")
     parser.add_argument("--nframe", type=int, default=5*2**PRECISION, help="number of frames")
@@ -36,7 +36,7 @@ def init(args=[], PRECISION=7):
         print(opt)
     return opt
 
-def make_gif(gifname, fnames, fps, do_delete=False):
+def make_gif(gifname, fnames, fps, do_delete=True):
     import imageio
 
     with imageio.get_writer(gifname, mode='I', fps=fps) as writer:
@@ -358,7 +358,7 @@ class ColourSystem:
         return self.xyz_to_rgb(xyz, out_fmt)
 
 if __name__ == "__main__":
-    import datetime
+    
     date = datetime.datetime.now().date().isoformat()
     figpath = f'{date}_caustique'
     print(f'Saving our simulations in={figpath}')
