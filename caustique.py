@@ -111,10 +111,12 @@ class Caustique:
 
     def do_raytracing(self, z):
         filename = f'{self.cachepath}/{self.opt.tag}_hist.npy'
-        binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
+        
         if self.opt.cache and os.path.isfile(filename):
             hist = np.load(filename)
         else:
+            binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
+        
             if self.opt.multispectral:
                 N_wavelengths = len(self.cs_srgb.cmf[:, 0])
 
@@ -146,18 +148,19 @@ class Caustique:
 
     def plot(self, z, do_color=True, gifname=None, dpi=150):
         hist = self.do_raytracing(z)
-        
+
         if gifname is None:
             gifname=f'{self.opt.figpath}/{self.opt.tag}.gif'
 
         subplotpars = matplotlib.figure.SubplotParams(left=0., right=1., bottom=0., top=1., wspace=0., hspace=0.,)
 
-        if self.opt.multispectral:
+        #if self.opt.multispectral:
             # TODO : multiply by the spectrum of the sky 
-            hist /= hist.max(axis=2)
+            #hist /= hist.max(axis=2)[:, :, 
 
         fnames = []
         for i_frame in range(self.opt.nframe):
+            binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
             fig, ax = plt.subplots(figsize=(binsy/dpi, binsx/dpi), subplotpars=subplotpars)
             if self.opt.multispectral:
                 image_rgb = self.cs_srgb.spec_to_rgb(hist[:, :, :, i_frame])
