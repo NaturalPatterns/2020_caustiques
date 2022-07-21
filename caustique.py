@@ -154,9 +154,18 @@ class Caustique:
 
         subplotpars = matplotlib.figure.SubplotParams(left=0., right=1., bottom=0., top=1., wspace=0., hspace=0.,)
 
-        #if self.opt.multispectral:
-            # TODO : multiply by the spectrum of the sky 
-            #hist /= hist.max(axis=2)[:, :, 
+        if self.opt.multispectral:
+            # multiply by the spectrum of the sky
+            wavelengths = self.cs_srgb.cmf[:, 0]*1e-9
+            intensity5800 = planck(wavelengths, 5800.)
+            scatter = scattering(wavelengths)
+            spectrum_sky = intensity5800 * scatter
+            hist = hist * spectrum_sky[None, None, :, None]
+            hist /= hist.max()
+
+            # some magic to only get the hue
+            for i_frame in range(self.opt.nframe):
+                hist[:, :, :, i_frame] /= hist[:, :, :, i_frame].max(axis=2)[:, :, :, None]
 
         fnames = []
         for i_frame in range(self.opt.nframe):
