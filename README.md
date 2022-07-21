@@ -9,7 +9,7 @@ In [this post](https://laurentperrinet.github.io/sciblog/posts/2020-06-19-causti
 
 <BR>
 <center>
-<img src="caustique.gif" width=61.8%/>
+<img src="caustique.gif" width="100%"/>
 </center>
 <BR>
 
