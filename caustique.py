@@ -69,9 +69,10 @@ class Caustique:
         # https://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
         self.d = vars(opt)
         os.makedirs(self.opt.figpath, exist_ok=True)
-        self.cachepath = os.path.join('/tmp', self.opt.figpath)
-        if opt.verbose: print(f'{self.cachepath=}')
-        os.makedirs(self.cachepath, exist_ok=True)
+        if self.opt.cache:
+            self.cachepath = os.path.join('/tmp', self.opt.figpath)
+            if opt.verbose: print(f'{self.cachepath=}')
+            os.makedirs(self.cachepath, exist_ok=True)
 
         # a standard white:
         illuminant_D65 = xyz_from_xy(0.3127, 0.3291), 
