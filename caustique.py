@@ -29,7 +29,7 @@ def init(args=[], ds=1, PRECISION=7):
     parser.add_argument("--min_lum", type=float, default=.2, help="diffusion level for the rendering")
     parser.add_argument("--fps", type=float, default=18, help="frames per second")
     parser.add_argument("--multispectral", type=bool, default=True, help="Compute caustics on the full spectrogram.")
-    parser.add_argument("--cache", type=bool, default=True, help="Cache intermediate output.")
+    parser.add_argument("--cache", type=bool, default=False, help="Cache intermediate output.")
     parser.add_argument("--verbose", type=bool, default=False, help="Displays more verbose output.")
 
     opt = parser.parse_args(args=args)
@@ -102,8 +102,8 @@ class Caustique:
 
         dzdx = z_ - np.roll(z_, 1, axis=0)
         dzdy = z_ - np.roll(z_, 1, axis=1)
-        xv = xv + modulation*self.opt.H * dzdx
-        yv = yv + modulation*self.opt.H * dzdy
+        xv = xv + modulation * self.opt.H * dzdx
+        yv = yv + modulation * self.opt.H * dzdy
 
         xv = np.mod(xv, 1)
         yv = np.mod(yv, self.ratio)
@@ -115,6 +115,7 @@ class Caustique:
         
         if self.opt.cache and os.path.isfile(filename):
             hist = np.load(filename)
+            
         else:
             binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
         
@@ -124,25 +125,30 @@ class Caustique:
                 # http://www.philiplaven.com/p20.html
                 # 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation
                 variation = .02
+                variation = .05
+                variation = .15
                 
-                hist = np.zeros((binsx, binsy, N_wavelengths, self.opt.nframe))
+                hist = np.zeros((binsx, binsy, self.opt.nframe, N_wavelengths))
                 for i_wavelength in range(N_wavelengths):
+                    modulation = 1. + variation/2 - variation*i_wavelength/N_wavelengths
+                    # print(i_wavelength, N_wavelengths, modulation)
                     for i_frame in range(self.opt.nframe):
-                        xv, yv = self.transform(z[:, :, i_frame], modulation=1. - variation*i_wavelength/N_wavelengths)
-                        hist[:, :, i_wavelength, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
-                                                                             bins=[binsx, binsy],
-                                                                             range=[[0, 1], [0, self.ratio]],
-                                                                             density=True)
+                        xv, yv = self.transform(z[:, :, i_frame], modulation=modulation)
+                        hist_, edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
+                                                               bins=[binsx, binsy],
+                                                               range=[[0, 1], [0, self.ratio]],
+                                                               density=True)
+                        hist[:, :, i_frame, i_wavelength] = hist_
                 hist /= hist.max()
             else:
                 hist = np.zeros((binsx, binsy, self.opt.nframe))
                 for i_frame in range(self.opt.nframe):
                     xv, yv = self.transform(z[:, :, i_frame])
-                    hist[:, :, i_frame], edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
-                                                                         bins=[binsx, binsy],
-                                                                         range=[[0, 1], [0, self.ratio]],
-                                                                         density=True)
-                hist /= hist.max()
+                    hist_, edge_x, edge_y = np.histogram2d(xv.ravel(), yv.ravel(),
+                                                           bins=[binsx, binsy],
+                                                           range=[[0, 1], [0, self.ratio]],
+                                                           density=True)
+                #hist /= hist.max()
             if self.opt.cache: np.save(filename, hist)
         return hist
     
@@ -157,24 +163,31 @@ class Caustique:
 
         if self.opt.multispectral:
             # multiply by the spectrum of the sky
-            wavelengths = self.cs_srgb.cmf[:, 0]*1e-9
-            intensity5800 = planck(wavelengths, 5800.)
-            scatter = scattering(wavelengths)
-            spectrum_sky = intensity5800 * scatter
-            hist = hist * spectrum_sky[None, None, :, None]
-            hist /= hist.max()
+            if False:
+                wavelengths = self.cs_srgb.cmf[:, 0]*1e-9
+                intensity5800 = planck(wavelengths, 5800.)
+                scatter = scattering(wavelengths)
+                spectrum_sky = intensity5800 * scatter
+                hist = hist * spectrum_sky[None, None, :, None]
+                hist /= hist.max()
 
             # some magic to only get the hue
-            for i_frame in range(self.opt.nframe):
-                hist[:, :, :, i_frame] /= hist[:, :, :, i_frame].max(axis=2)[:, :, :, None]
+            #print(hist.shape)
+            #for i_frame in range(self.opt.nframe):
+            #    hist[:, :, :, i_frame] /= hist[:, :, :, i_frame].max(axis=2)[:, :, None]
+            #hist -= hist.min()
+            hist /= hist.max()
+            image_rgb = self.cs_srgb.spec_to_rgb(hist)
+            image_rgb -= image_rgb.min()
+            image_rgb /= image_rgb.max()
+
 
         fnames = []
         for i_frame in range(self.opt.nframe):
-            binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
-            fig, ax = plt.subplots(figsize=(binsy/dpi, binsx/dpi), subplotpars=subplotpars)
+            fig, ax = plt.subplots(figsize=(self.opt.nx/self.opt.bin_dens/dpi, self.opt.ny/self.opt.bin_dens/dpi), subplotpars=subplotpars)
             if self.opt.multispectral:
-                image_rgb = self.cs_srgb.spec_to_rgb(hist[:, :, :, i_frame])
-                ax.imshow(image_rgb, vmin=0, vmax=1)
+                
+                ax.imshow(image_rgb[:, :, i_frame] ** (1/1.61803), vmin=0, vmax=1)
             else:
                 if do_color:
                     bluesky = np.array([0.268375, 0.283377]) # xyz
