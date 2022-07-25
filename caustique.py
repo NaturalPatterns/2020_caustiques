@@ -16,7 +16,7 @@ def init(args=[], ds=1, PRECISION=7):
     parser.add_argument("--nx", type=int, default=5*2**PRECISION, help="number of pixels (vertical)")
     parser.add_argument("--ny", type=int, default=8*2**PRECISION, help="number of pixels (horizontal)")
     parser.add_argument("--nframe", type=int, default=5*2**PRECISION, help="number of frames")
-    parser.add_argument("--bin_dens", type=int, default=1, help="relative bin density")
+    parser.add_argument("--bin_dens", type=int, default=2, help="relative bin density")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
     parser.add_argument("--H", type=float, default=10., help="depth of the pool")
     parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
