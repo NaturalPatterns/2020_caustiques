@@ -16,7 +16,7 @@ def init(args=[], ds=1, PRECISION=7):
     parser.add_argument("--nx", type=int, default=5*2**PRECISION, help="number of pixels (vertical)")
     parser.add_argument("--ny", type=int, default=8*2**PRECISION, help="number of pixels (horizontal)")
     parser.add_argument("--nframe", type=int, default=5*2**PRECISION, help="number of frames")
-    parser.add_argument("--bin_dens", type=int, default=4, help="relative bin density")
+    parser.add_argument("--bin_dens", type=int, default=1, help="relative bin density")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
     parser.add_argument("--H", type=float, default=10., help="depth of the pool")
     parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
@@ -29,7 +29,7 @@ def init(args=[], ds=1, PRECISION=7):
     parser.add_argument("--min_lum", type=float, default=.2, help="diffusion level for the rendering")
     parser.add_argument("--fps", type=float, default=18, help="frames per second")
     parser.add_argument("--multispectral", type=bool, default=True, help="Compute caustics on the full spectrogram.")
-    parser.add_argument("--cache", type=bool, default=False, help="Cache intermediate output.")
+    parser.add_argument("--cache", type=bool, default=True, help="Cache intermediate output.")
     parser.add_argument("--verbose", type=bool, default=False, help="Displays more verbose output.")
 
     opt = parser.parse_args(args=args)
@@ -69,10 +69,9 @@ class Caustique:
         # https://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
         self.d = vars(opt)
         os.makedirs(self.opt.figpath, exist_ok=True)
-        if self.opt.cache:
-            self.cachepath = os.path.join('/tmp', self.opt.figpath)
-            if opt.verbose: print(f'{self.cachepath=}')
-            os.makedirs(self.cachepath, exist_ok=True)
+        self.cachepath = os.path.join('/tmp', self.opt.figpath)
+        if opt.verbose: print(f'{self.cachepath=}')
+        os.makedirs(self.cachepath, exist_ok=True)
 
         # a standard white:
         illuminant_D65 = xyz_from_xy(0.3127, 0.3291), 
@@ -84,7 +83,7 @@ class Caustique:
                                white=illuminant_sun)
     def wave(self):
         filename = f'{self.cachepath}/{self.opt.tag}_wave.npy'
-        if self.opt.cache and os.path.isfile(filename):
+        if os.path.isfile(filename):
             z = np.load(filename)
         else:
             # A simplistic model of a wave using https://github.com/NeuralEnsemble/MotionClouds
@@ -112,10 +111,8 @@ class Caustique:
 
     def do_raytracing(self, z):
         filename = f'{self.cachepath}/{self.opt.tag}_hist.npy'
-        
-        if self.opt.cache and os.path.isfile(filename):
+        if os.path.isfile(filename):
             hist = np.load(filename)
-            
         else:
             binsx, binsy = self.opt.nx//self.opt.bin_dens, self.opt.ny//self.opt.bin_dens
         
@@ -127,6 +124,7 @@ class Caustique:
                 variation = .02
                 variation = .05
                 variation = .15
+                variation = .40
                 
                 hist = np.zeros((binsx, binsy, self.opt.nframe, N_wavelengths))
                 for i_wavelength in range(N_wavelengths):
