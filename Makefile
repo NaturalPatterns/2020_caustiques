@@ -8,5 +8,12 @@ JN=$(J) --to notebook --inplace
 default:
 	$(JN) 2022-07-19_caustique.ipynb
 
+
+install_local:
+	python -m pip install --user -r requirements.txt
+
+install_global:
+	python -m pip install -r requirements.txt
+
 clean:
 	rm -fr /tmp/2022-02-08_*
