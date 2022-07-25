@@ -17,6 +17,7 @@ def init(args=[], ds=1, PRECISION=7):
     parser.add_argument("--ny", type=int, default=8*2**PRECISION, help="number of pixels (horizontal)")
     parser.add_argument("--nframe", type=int, default=5*2**PRECISION, help="number of frames")
     parser.add_argument("--bin_dens", type=int, default=2, help="relative bin density")
+    parser.add_argument("--bin_spectrum", type=int, default=8, help="bin spacing in spectrum")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
     parser.add_argument("--H", type=float, default=10., help="depth of the pool")
     parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
@@ -126,8 +127,8 @@ class Caustique:
                 variation = .15
                 variation = .40
                 
-                hist = np.zeros((binsx, binsy, self.opt.nframe, N_wavelengths))
-                for i_wavelength in range(N_wavelengths):
+                hist = np.zeros((binsx, binsy, self.opt.nframe, N_wavelengths//self.opt.bin_spectrum))
+                for ii_wavelength, i_wavelength in enumerate(range(0, N_wavelengths, self.opt.bin_spectrum)):
                     modulation = 1. + variation/2 - variation*i_wavelength/N_wavelengths
                     # print(i_wavelength, N_wavelengths, modulation)
                     for i_frame in range(self.opt.nframe):
@@ -136,7 +137,7 @@ class Caustique:
                                                                bins=[binsx, binsy],
                                                                range=[[0, 1], [0, self.ratio]],
                                                                density=True)
-                        hist[:, :, i_frame, i_wavelength] = hist_
+                        hist[:, :, i_frame, ii_wavelength] = hist_
                 hist /= hist.max()
             else:
                 hist = np.zeros((binsx, binsy, self.opt.nframe))
@@ -175,8 +176,16 @@ class Caustique:
             #    hist[:, :, :, i_frame] /= hist[:, :, :, i_frame].max(axis=2)[:, :, None]
             #hist -= hist.min()
             hist /= hist.max()
-            image_rgb = self.cs_srgb.spec_to_rgb(hist)
-            image_rgb -= image_rgb.min()
+            
+            #image_rgb = self.cs_srgb.spec_to_rgb(hist)
+            image_rgb = np.zeros((opt.nx,  opt.ny, 3, self.opt.nframe))
+            for ii_wavelength, i_wavelength in enumerate(range(0, N_wavelengths, self.opt.bin_spectrum)):
+                spec = np.zeros((N_wavelengths+1))
+                spec[i_wavelength] = 1
+                rgb = self.cs_srgb.spec_to_rgb(spec)
+                image_rgb += hist[:, :, None, :] * rgb[None, None, :, None]
+            
+            #image_rgb -= image_rgb.min()
             image_rgb /= image_rgb.max()
 
 
@@ -185,7 +194,8 @@ class Caustique:
             fig, ax = plt.subplots(figsize=(self.opt.nx/self.opt.bin_dens/dpi, self.opt.ny/self.opt.bin_dens/dpi), subplotpars=subplotpars)
             if self.opt.multispectral:
                 
-                ax.imshow(image_rgb[:, :, i_frame] ** (1/1.61803), vmin=0, vmax=1)
+
+                ax.imshow(image_rgb[:, :, :, i_frame] ** (1/1.61803), vmin=0, vmax=1)
             else:
                 if do_color:
                     bluesky = np.array([0.268375, 0.283377]) # xyz
