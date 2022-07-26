@@ -6,7 +6,9 @@ JN=$(J) --to notebook --inplace
 
 
 default:
-	$(JN) 2022-07-19_caustique.ipynb
+	$(JN) 2022-07-25_caustique.ipynb
+	# $(JN) 2022-07-19_caustique.ipynb
+    
 
 
 install_local:
