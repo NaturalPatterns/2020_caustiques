@@ -6,3 +6,4 @@ numpy
 MotionClouds
 imageio
 pygifsicle
+lambda2color
