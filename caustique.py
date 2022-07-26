@@ -7,7 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from lambda2color import Lambda2color, xyz_from_xy
 
-figpath = '2022-07-19_caustique'
+figpath = '2022-07-25_caustique'
 
 def init(args=[], figpath=figpath, PRECISION=7):
 
@@ -20,13 +20,15 @@ def init(args=[], figpath=figpath, PRECISION=7):
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", type=str, default='caustique', help="Tag")
     parser.add_argument("--figpath", type=str, default=figpath, help="Folder to store images")
-    parser.add_argument("--nx", type=int, default=5*2**PRECISION, help="number of pixels (vertical)")
+    parser.add_argument("--vext", type=str, default='mp4', help="Folder to store images")
+    parser.add_argument("--nx", type=int, default=8*2**PRECISION, help="number of pixels (vertical)")
     parser.add_argument("--ny", type=int, default=8*2**PRECISION, help="number of pixels (horizontal)")
     parser.add_argument("--nframe", type=int, default=5*2**PRECISION, help="number of frames")
     parser.add_argument("--bin_dens", type=int, default=2, help="relative bin density")
-    parser.add_argument("--bin_spectrum", type=int, default=18, help="bin spacing in spectrum")
+    parser.add_argument("--bin_spectrum", type=int, default=6, help="bin spacing in spectrum")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
     parser.add_argument("--H", type=float, default=10., help="depth of the pool")
+    parser.add_argument("--variation", type=float, default=.09, help="variation of diffraction index: http://www.philiplaven.com/p20.html 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation")
     parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
     parser.add_argument("--B_sf", type=float, default=0.002, help="bandwidth in sf")
     parser.add_argument("--V_Y", type=float, default=0.3, help="horizontal speed")
@@ -37,7 +39,7 @@ def init(args=[], figpath=figpath, PRECISION=7):
     parser.add_argument("--min_lum", type=float, default=.2, help="diffusion level for the rendering")
     parser.add_argument("--fps", type=float, default=18, help="frames per second")
     parser.add_argument("--multispectral", type=bool, default=True, help="Compute caustics on the full spectrogram.")
-    parser.add_argument("--cache", type=bool, default=True, help="Cache intermediate output.")
+    parser.add_argument("--cache", type=bool, default=False, help="Cache intermediate output.")
     parser.add_argument("--verbose", type=bool, default=False, help="Displays more verbose output.")
 
     opt = parser.parse_args(args=args)
@@ -59,6 +61,14 @@ def make_gif(gifname, fnames, fps, do_delete=True):
         for fname in fnames: os.remove(fname)
     return gifname
 
+# https://moviepy.readthedocs.io/en/latest/getting_started/videoclips.html#imagesequenceclip
+def make_mp4(mp4name, fnames, fps, do_delete=True):
+    import moviepy.editor as mpy
+    clip = mpy.ImageSequenceClip(fnames, fps=fps)
+    clip.write_videofile(mp4name, fps=fps, codec='libx264', verbose=False, logger=None)
+    if do_delete: 
+        for fname in fnames: os.remove(fname)
+    return mp4name
 
 class Caustique:
     def __init__(self, opt):
@@ -126,17 +136,10 @@ class Caustique:
         
             if self.opt.multispectral:
                 N_wavelengths = len(self.cs_srgb.cmf[:, 0])
-
-                # http://www.philiplaven.com/p20.html
-                # 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation
-                variation = .02
-                variation = .05
-                variation = .15
-                variation = .40
                 
                 hist = np.zeros((binsx, binsy, self.opt.nframe, N_wavelengths//self.opt.bin_spectrum + 1))
                 for ii_wavelength, i_wavelength in enumerate(range(0, N_wavelengths, self.opt.bin_spectrum)):
-                    modulation = 1. + variation/2 - variation*i_wavelength/N_wavelengths
+                    modulation = 1. + self.opt.variation/2 - self.opt.variation*i_wavelength/N_wavelengths
                     # print(i_wavelength, N_wavelengths, modulation)
                     for i_frame in range(self.opt.nframe):
                         xv, yv = self.transform(z[:, :, i_frame], modulation=modulation)
@@ -159,33 +162,37 @@ class Caustique:
         return hist
     
 
-    def plot(self, z, do_color=True, gifname=None, dpi=150):
+    def plot(self, z, do_color=True, videoname=None, dpi=50):
         hist = self.do_raytracing(z)
 
-        if gifname is None:
-            gifname=f'{self.opt.figpath}/{self.opt.tag}.gif'
+        if videoname is None:
+            videoname=f'{self.opt.figpath}/{self.opt.tag}.{self.opt.vext}'
 
         subplotpars = matplotlib.figure.SubplotParams(left=0., right=1., bottom=0., top=1., wspace=0., hspace=0.,)
 
         if self.opt.multispectral:
+            N_wavelengths = len(self.cs_srgb.cmf[:, 0])
             # multiply by the spectrum of the sky
-            if False:
-                wavelengths = self.cs_srgb.cmf[:, 0]*1e-9
+            if True:
+                wavelengths = self.cs_srgb.cmf[::self.opt.bin_spectrum, 0]*1e-9
                 intensity5800 = planck(wavelengths, 5800.)
                 scatter = scattering(wavelengths)
                 spectrum_sky = intensity5800 * scatter
-                hist = hist * spectrum_sky[None, None, :, None]
+                hist = hist * spectrum_sky[None, None, None, :]
                 hist /= hist.max()
 
-            # some magic to only get the hue
-            #print(hist.shape)
-            #for i_frame in range(self.opt.nframe):
-            #    hist[:, :, :, i_frame] /= hist[:, :, :, i_frame].max(axis=2)[:, :, None]
-            #hist -= hist.min()
-            hist /= hist.max()
+            if False:
+                # some magic to only get the hue
+                hist_max = hist.max(axis=-1)[:, :, :, None]*np.ones((1, 1, 1, N_wavelengths//self.opt.bin_spectrum + 1))
+                #print(hist.shape, hist.max(axis=-1).shape, hist_max.shape)
+                hist[hist_max==0] = 1
+                hist_max[hist_max==0] = 1
+                hist /= hist_max
+                #hist -= hist.min()
+            else:
+                hist /= hist.max()
             
             #image_rgb = self.cs_srgb.spec_to_rgb(hist)
-            N_wavelengths = len(self.cs_srgb.cmf[:, 0])
             image_rgb = np.zeros((self.opt.nx//self.opt.bin_dens,  self.opt.ny//self.opt.bin_dens, 3, self.opt.nframe))
             for ii_wavelength, i_wavelength in enumerate(range(0, N_wavelengths, self.opt.bin_spectrum)):
                 spec = np.zeros((N_wavelengths))
@@ -194,15 +201,15 @@ class Caustique:
                 # print(hist.shape, image_rgb.shape, rgb.shape)
                 image_rgb += hist[:, :, None, :, ii_wavelength] * rgb[None, None, :, None]
             
-            #image_rgb -= image_rgb.min()
+            # image_rgb -= image_rgb.min()
             image_rgb /= image_rgb.max()
 
 
         fnames = []
         for i_frame in range(self.opt.nframe):
-            fig, ax = plt.subplots(figsize=(self.opt.nx/self.opt.bin_dens/dpi, self.opt.ny/self.opt.bin_dens/dpi), subplotpars=subplotpars)
+            fig, ax = plt.subplots(figsize=(self.opt.ny/self.opt.bin_dens/dpi, self.opt.nx/self.opt.bin_dens/dpi), subplotpars=subplotpars)
             if self.opt.multispectral:
-                ax.imshow(image_rgb[:, :, :, i_frame] ** (1/1.61803), vmin=0, vmax=1)
+                ax.imshow(image_rgb[:, :, :, i_frame] ** (1/2.61803), vmin=0, vmax=1)
             else:
                 if do_color:
                     bluesky = np.array([0.268375, 0.283377]) # xyz
@@ -226,9 +233,18 @@ class Caustique:
             fig.savefig(fname, dpi=dpi)
             fnames.append(fname)
             plt.close('all')
+        if self.opt.vext == 'gif':
+            return make_gif(videoname, fnames, fps=self.opt.fps)
+        else:
+            return make_mp4(videoname, fnames, fps=self.opt.fps)
 
-        return make_gif(gifname, fnames, fps=self.opt.fps)
-
+    def show(self, videoname, width=1024):
+        if self.opt.vext == 'gif':
+            from IPython.display import Image, display
+            return display(Image(url=videoname, width=width))
+        else:
+            import moviepy.editor as mpy
+            return mpy.ipython_display(videoname, width=width)
     
 # borrowed from https://github.com/gummiks/gummiks.github.io/blob/master/scripts/astro/planck.py
 
@@ -271,5 +287,5 @@ if __name__ == "__main__":
     c = Caustique(opt)
     z = c.wave()
     
-    gifname = c.plot(z)
+    videoname = c.plot(z)
     
