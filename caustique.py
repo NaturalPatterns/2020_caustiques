@@ -10,7 +10,7 @@ from lambda2color import Lambda2color, xyz_from_xy
 
 figpath = None
 
-def init(args=[], figpath=figpath, PRECISION=5):
+def init(args=[], figpath=figpath, PRECISION=6):
 
     import argparse
     if figpath is None:
@@ -28,10 +28,10 @@ def init(args=[], figpath=figpath, PRECISION=5):
     parser.add_argument("--bin_dens", type=int, default=2, help="relative bin density")
     parser.add_argument("--bin_spectrum", type=int, default=6, help="bin spacing in spectrum")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
-    parser.add_argument("--H", type=float, default=6., help="depth of the pool")
+    parser.add_argument("--H", type=float, default=10., help="depth of the pool")
     parser.add_argument("--variation", type=float, default=.4, help="variation of diffraction index: http://www.philiplaven.com/p20.html 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation")
-    parser.add_argument("--sf_0", type=float, default=0.006, help="sf")
-    parser.add_argument("--B_sf", type=float, default=0.002, help="bandwidth in sf")
+    parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
+    parser.add_argument("--B_sf", type=float, default=0.004, help="bandwidth in sf")
     parser.add_argument("--V_Y", type=float, default=0.3, help="horizontal speed")
     parser.add_argument("--V_X", type=float, default=0.3, help="vertical speed")
     parser.add_argument("--B_V", type=float, default=4.0, help="bandwidth in speed")
