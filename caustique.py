@@ -5,11 +5,12 @@ import datetime
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import MotionClouds as mc
 from lambda2color import Lambda2color, xyz_from_xy
 
-figpath = '2022-07-25_caustique'
+figpath = None
 
-def init(args=[], figpath=figpath, PRECISION=7):
+def init(args=[], figpath=figpath, PRECISION=5):
 
     import argparse
     if figpath is None:
@@ -27,9 +28,9 @@ def init(args=[], figpath=figpath, PRECISION=7):
     parser.add_argument("--bin_dens", type=int, default=2, help="relative bin density")
     parser.add_argument("--bin_spectrum", type=int, default=6, help="bin spacing in spectrum")
     parser.add_argument("--seed", type=int, default=42, help="seed for RNG")
-    parser.add_argument("--H", type=float, default=10., help="depth of the pool")
-    parser.add_argument("--variation", type=float, default=.09, help="variation of diffraction index: http://www.philiplaven.com/p20.html 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation")
-    parser.add_argument("--sf_0", type=float, default=0.004, help="sf")
+    parser.add_argument("--H", type=float, default=6., help="depth of the pool")
+    parser.add_argument("--variation", type=float, default=.4, help="variation of diffraction index: http://www.philiplaven.com/p20.html 1.40 at 400 nm and 1.37 at 700nm makes a 2% variation")
+    parser.add_argument("--sf_0", type=float, default=0.006, help="sf")
     parser.add_argument("--B_sf", type=float, default=0.002, help="bandwidth in sf")
     parser.add_argument("--V_Y", type=float, default=0.3, help="horizontal speed")
     parser.add_argument("--V_X", type=float, default=0.3, help="vertical speed")
@@ -37,6 +38,7 @@ def init(args=[], figpath=figpath, PRECISION=7):
     parser.add_argument("--theta", type=float, default=2*np.pi*(2-1.61803), help="angle with the horizontal")
     parser.add_argument("--B_theta", type=float, default=np.pi/3, help="bandwidth in theta")
     parser.add_argument("--min_lum", type=float, default=.2, help="diffusion level for the rendering")
+    parser.add_argument("--gamma", type=float, default=2.4, help="Gamma exponant to convert luminosity to luminance")
     parser.add_argument("--fps", type=float, default=18, help="frames per second")
     parser.add_argument("--multispectral", type=bool, default=True, help="Compute caustics on the full spectrogram.")
     parser.add_argument("--cache", type=bool, default=False, help="Cache intermediate output.")
@@ -79,6 +81,7 @@ class Caustique:
         * the Y axis is horizontal and goes "right".
 
         """
+        self.mc = mc
         self.ratio = opt.ny/opt.nx # ratio between height and width (>1 for portrait, <1 for landscape)
         X = np.linspace(0, 1, opt.nx, endpoint=False) # vertical
         Y = np.linspace(0, self.ratio, opt.ny, endpoint=False) # horizontal
@@ -209,7 +212,7 @@ class Caustique:
         for i_frame in range(self.opt.nframe):
             fig, ax = plt.subplots(figsize=(self.opt.ny/self.opt.bin_dens/dpi, self.opt.nx/self.opt.bin_dens/dpi), subplotpars=subplotpars)
             if self.opt.multispectral:
-                ax.imshow(image_rgb[:, :, :, i_frame] ** (1/2.61803), vmin=0, vmax=1)
+                ax.imshow(image_rgb[:, :, :, i_frame] ** (1/self.opt.gamma), vmin=0, vmax=1)
             else:
                 if do_color:
                     bluesky = np.array([0.268375, 0.283377]) # xyz
@@ -243,8 +246,14 @@ class Caustique:
             from IPython.display import Image, display
             return display(Image(url=videoname, width=width))
         else:
-            import moviepy.editor as mpy
-            return mpy.ipython_display(videoname, width=width)
+            #import moviepy.editor as mpy
+            #return mpy.ipython_display(videoname, width=width)
+            # https://github.com/NeuralEnsemble/MotionClouds/blob/master/MotionClouds/MotionClouds.py#L858
+            from IPython.display import HTML, display
+            opts = ' loop="1" autoplay="1" controls '
+            html = HTML(f'<video {opts} src="{videoname}" type="video/{self.opt.vext}" width={width}\>')
+            html.reload()
+            return display(html)
     
 # borrowed from https://github.com/gummiks/gummiks.github.io/blob/master/scripts/astro/planck.py
 
