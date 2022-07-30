@@ -15,5 +15,8 @@ install_local:
 install_global:
 	python3 -m pip install --upgrade -r requirements.txt
 
+pull_fortytwo:
+	rsync -av -u  -e "ssh  -i ~/.ssh/id-ring-ecdsa"  laurentperrinet@10.164.6.136:quantic/EtienneRey/2020_caustiques/$(TAG) .
+
 clean:
 	rm -fr /tmp/$(TAG)/*
