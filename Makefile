@@ -5,8 +5,10 @@ JN=$(J) --to notebook --inplace
 #JN=$(J) --to markdown --stdout
 
 
-default:
+default: run html
+run:
 	$(JN) $(TAG).ipynb
+html:
 	jupyter-nbconvert $(TAG).ipynb --to html --output index.html
 
 install_local:
