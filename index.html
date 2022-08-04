@@ -14311,12 +14311,12 @@ Requirement already satisfied: imageio in /usr/local/lib/python3.9/site-packages
 Requirement already satisfied: pygifsicle in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 9)) (1.0.5)
 Requirement already satisfied: lambda2color in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 10)) (1.0)
 Requirement already satisfied: pillow&gt;=6.2.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (9.0.1)
-Requirement already satisfied: python-dateutil&gt;=2.7 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.8.2)
-Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (1.3.1)
-Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (4.30.0)
 Requirement already satisfied: pyparsing&gt;=2.2.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.4.7)
 Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (20.9)
 Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (0.10.0)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (1.3.1)
+Requirement already satisfied: python-dateutil&gt;=2.7 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.8.2)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (4.30.0)
 Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (from cycler&gt;=0.10-&gt;matplotlib-&gt;-r requirements.txt (line 5)) (1.16.0)
 Note: you may need to restart the kernel to use updated packages.
 </pre>
@@ -15495,7 +15495,7 @@ variation = 0.599
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;sf_0&#39;</span><span class="p">,</span> <span class="s1">&#39;B_sf&#39;</span><span class="p">]:</span> <span class="c1">#, &#39;B_theta&#39;, &#39;V_X&#39;, &#39;B_V&#39;]: #  &#39;theta&#39;, &#39;V_Y&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;sf_0&#39;</span><span class="p">,</span> <span class="s1">&#39;B_sf&#39;</span><span class="p">,</span> <span class="s1">&#39;B_theta&#39;</span><span class="p">,</span> <span class="s1">&#39;V_X&#39;</span><span class="p">,</span> <span class="s1">&#39;B_V&#39;</span><span class="p">]:</span> <span class="c1">#  &#39;theta&#39;, &#39;V_Y&#39;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;======</span><span class="si">{</span><span class="n">variable</span><span class="si">}</span><span class="s1">======&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">modul</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N_scan</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">):</span>
         <span class="n">opt</span> <span class="o">=</span> <span class="n">init</span><span class="p">()</span>
@@ -16216,7 +16216,6 @@ B_sf=B_sf(default)*1.682=6.727E-03
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>2022-07-30_caustique
 B_sf=B_sf(default)*2.000=8.000E-03
-Doing  2022-07-30_caustique/caustique_B_sf_modul_2.000.mp4
 </pre>
 </div>
 </div>
@@ -16230,6 +16229,738 @@ Doing  2022-07-30_caustique/caustique_B_sf_modul_2.000.mp4
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
 <video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_sf_modul_2.000.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>======B_theta======
+2022-07-30_caustique
+B_theta=B_theta(default)*0.500=5.236E-01
+Doing  2022-07-30_caustique/caustique_B_theta_modul_0.500.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_0.500.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*0.595=6.227E-01
+Doing  2022-07-30_caustique/caustique_B_theta_modul_0.595.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_0.595.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*0.707=7.405E-01
+Doing  2022-07-30_caustique/caustique_B_theta_modul_0.707.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_0.707.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*0.841=8.806E-01
+Doing  2022-07-30_caustique/caustique_B_theta_modul_0.841.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_0.841.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*1.000=1.047E+00
+Doing  2022-07-30_caustique/caustique_B_theta_modul_1.000.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_1.000.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*1.189=1.245E+00
+Doing  2022-07-30_caustique/caustique_B_theta_modul_1.189.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_1.189.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*1.414=1.481E+00
+Doing  2022-07-30_caustique/caustique_B_theta_modul_1.414.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_1.414.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*1.682=1.761E+00
+Doing  2022-07-30_caustique/caustique_B_theta_modul_1.682.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_1.682.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_theta=B_theta(default)*2.000=2.094E+00
+Doing  2022-07-30_caustique/caustique_B_theta_modul_2.000.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_theta_modul_2.000.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>======V_X======
+2022-07-30_caustique
+V_X=V_X(default)*0.500=1.500E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_0.500.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_0.500.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*0.595=1.784E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_0.595.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_0.595.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*0.707=2.121E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_0.707.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_0.707.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*0.841=2.523E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_0.841.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_0.841.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*1.000=3.000E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_1.000.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_1.000.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*1.189=3.568E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_1.189.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_1.189.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*1.414=4.243E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_1.414.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_1.414.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*1.682=5.045E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_1.682.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_1.682.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+V_X=V_X(default)*2.000=6.000E-01
+Doing  2022-07-30_caustique/caustique_V_X_modul_2.000.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_V_X_modul_2.000.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>======B_V======
+2022-07-30_caustique
+B_V=B_V(default)*0.500=2.000E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_0.500.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_0.500.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*0.595=2.378E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_0.595.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_0.595.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*0.707=2.828E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_0.707.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_0.707.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*0.841=3.364E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_0.841.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_0.841.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*1.000=4.000E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_1.000.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_1.000.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*1.189=4.757E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_1.189.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_1.189.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*1.414=5.657E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_1.414.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_1.414.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*1.682=6.727E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_1.682.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_1.682.mp4" type="video/mp4" width=1024\>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2022-07-30_caustique
+B_V=B_V(default)*2.000=8.000E+00
+Doing  2022-07-30_caustique/caustique_B_V_modul_2.000.mp4
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_2.000.mp4" type="video/mp4" width=1024\>
 </div>
 
 </div>
