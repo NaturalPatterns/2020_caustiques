@@ -8,8 +8,13 @@ JN=$(J) --to notebook --inplace
 default: run html
 run:
 	$(JN) $(TAG).ipynb
+
+
 html:
 	jupyter-nbconvert $(TAG).ipynb --to html --output index.html
+
+mp4:
+	cp $(TAG)_caustique/caustique.mp4 iridiscence.mp4
 
 install_local:
 	python3 -m pip install --upgrade --user -r requirements.txt
