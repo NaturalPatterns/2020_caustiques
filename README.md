@@ -23,7 +23,7 @@ This is joint work with artist [Etienne Rey](https://laurentperrinet.github.io/a
 
 ## iridiscence (2022)
 
-Upon further observation, one may discover that caustics exhibit some [iridescence](https://en.wikipedia.org/wiki/Iridescence)$^\ast$, that is, that the light pattern which forms the waggling lines of the caustics may decompose into different colors, forming evanescent rainbows. Here, we will simply use a modulation of the [Snell-Descartes law](https://en.wikipedia.org/wiki/Snell's_law) that we used to compute different angle of refraction. This will be put in relation with the dependance of the refraction index with the wavelength of light and the transformation of a [monochromatic light into RGB](https://github.com/laurentperrinet/lambda2color) that we used in a previous post about [colors of the sky](https://laurentperrinet.github.io/sciblog/posts/2020-07-04-colors-of-the-sky.html). The results are close to subjective observations, with the surprising (to me) observation that colors appear more *between* nodes...
+Upon further observation, one may discover that caustics exhibit some [iridescence](https://en.wikipedia.org/wiki/Iridescence)$^\ddagger$, that is, that the light pattern which forms the waggling lines of the caustics may decompose into different colors, forming evanescent rainbows. Here, we will simply use a modulation of the [Snell-Descartes law](https://en.wikipedia.org/wiki/Snell's_law) that we used to compute different angle of refraction. This will be put in relation with the dependance of the refraction index with the wavelength of light and the transformation of a [monochromatic light into RGB](https://github.com/laurentperrinet/lambda2color) that we used in a previous post about [colors of the sky](https://laurentperrinet.github.io/sciblog/posts/2020-07-04-colors-of-the-sky.html). The results are close to subjective observations, with the surprising (to me) observation that colors appear more *between* nodes...
   
 <BR>
 <center>
@@ -31,7 +31,7 @@ Upon further observation, one may discover that caustics exhibit some [iridescen
 </center>
 <BR>
 
-* $\ast$ I use the term iridescence which is improper in the physical sense as it rather concerns the property of an object to exhibit different colors depending on the angle of view. However, in the perspective of the work with [Etienne Rey](https://laurentperrinet.github.io/authors/etienne-rey/) it resonates with our endeavour to show that percepetion, in particular visual perception, is an active process of the observer within its environment.
+Note: $\ddagger$ I use the term iridescence which is improper in the physical sense as it rather concerns the property of an object to exhibit different colors depending on the angle of view. However, in the perspective of the work with [Etienne Rey](https://laurentperrinet.github.io/authors/etienne-rey/) it resonates with our endeavour to show that percepetion, in particular visual perception, is an active process of the observer within its environment.
   
 ## installation
 
