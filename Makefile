@@ -5,13 +5,16 @@ JN=$(J) --to notebook --inplace
 #JN=$(J) --to markdown --stdout
 
 
-default: run html
+default: run html github
+
 run:
 	$(JN) $(TAG).ipynb
 
-
 html:
 	jupyter-nbconvert $(TAG).ipynb --to html --output index.html
+
+github:
+	git pull; git commit -am"$(TAG)" ; git push
 
 mp4:
 	cp $(TAG)_caustique/caustique.mp4 iridiscence.mp4
