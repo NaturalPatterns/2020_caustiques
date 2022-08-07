@@ -14798,6 +14798,47 @@ a.anchor-link {
 </div>
 </div>
 
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">lambda2color</span> <span class="kn">import</span> <span class="n">Lambda2color</span><span class="p">,</span> <span class="n">xyz_from_xy</span>
+
+<span class="c1"># borrowed from https://github.com/gummiks/gummiks.github.io/blob/master/scripts/astro/planck.py</span>
+<span class="k">def</span> <span class="nf">planck</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">const</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">c</span> <span class="c1"># c = 3.0e+8</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">h</span> <span class="c1"># h = 6.626e-34</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">k</span> <span class="c1"># k = 1.38e-23</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">c</span><span class="o">/</span><span class="p">(</span><span class="n">wav</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">intensity</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="p">(</span> <span class="p">(</span><span class="n">wav</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">intensity</span>
+
+<span class="k">def</span> <span class="nf">scattering</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.45</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    b is  proportionate  to  the  column  density  of  aerosols  </span>
+<span class="sd">    along  the  path  of  sunlight,  from  outside  the  atmosphere </span>
+<span class="sd">    to  the  point  of  observation</span>
+<span class="sd">    </span>
+<span class="sd">    N_O3  is  the  ozone  column  density  along  the  path  of  sunlight,  </span>
+<span class="sd">    sigma_O3 is  the  wavelength dependent ozone absorption cross-section.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># converting wav in µm:</span>
+    <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a</span><span class="o">/</span><span class="p">((</span><span class="n">wav</span><span class="o">/</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span><span class="p">))</span> <span class="c1"># Rayleigh extinction by nitrogen</span>
+    <span class="n">intensity</span> <span class="o">*=</span> <span class="p">(</span><span class="n">wav</span><span class="o">/</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">**-</span><span class="mi">4</span>
+    <span class="n">intensity</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">/</span><span class="p">((</span><span class="n">wav</span><span class="o">/</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">**</span><span class="n">p</span><span class="p">))</span> <span class="c1"># Aerosols</span>
+    <span class="k">return</span> <span class="n">intensity</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -14809,7 +14850,8 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Caustique</span><span class="p">:</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">MotionClouds</span> <span class="k">as</span> <span class="nn">mc</span>
+<span class="k">class</span> <span class="nc">Caustique</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Image coordinates follow &#39;ij&#39; indexing, that is,</span>
@@ -14845,8 +14887,7 @@ a.anchor-link {
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
             <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># A simplistic model of a wave using https://github.com/NeuralEnsemble/MotionClouds</span>
-            <span class="kn">import</span> <span class="nn">MotionClouds</span> <span class="k">as</span> <span class="nn">mc</span>
+            <span class="c1"># A simplistic model of a wave using https://github.com/NeuralEnsemble/MotionClouds            </span>
             <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">ft</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">get_grids</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">)</span>
             <span class="n">env</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">envelope_gabor</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">ft</span><span class="p">,</span> <span class="n">V_X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">V_Y</span><span class="p">,</span> <span class="n">V_Y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">V_X</span><span class="p">,</span> <span class="n">B_V</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">B_V</span><span class="p">,</span>
                                     <span class="n">sf_0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">sf_0</span><span class="p">,</span> <span class="n">B_sf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">B_sf</span><span class="p">,</span>
@@ -14993,36 +15034,6 @@ a.anchor-link {
             <span class="n">html</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">display</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     
-
-<span class="kn">import</span> <span class="nn">MotionClouds</span> <span class="k">as</span> <span class="nn">mc</span>
-<span class="kn">from</span> <span class="nn">lambda2color</span> <span class="kn">import</span> <span class="n">Lambda2color</span><span class="p">,</span> <span class="n">xyz_from_xy</span>
-
-<span class="c1"># borrowed from https://github.com/gummiks/gummiks.github.io/blob/master/scripts/astro/planck.py</span>
-<span class="k">def</span> <span class="nf">planck</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">const</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">c</span> <span class="c1"># c = 3.0e+8</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">h</span> <span class="c1"># h = 6.626e-34</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">k</span> <span class="c1"># k = 1.38e-23</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">c</span><span class="o">/</span><span class="p">(</span><span class="n">wav</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">T</span><span class="p">)</span>
-    <span class="n">intensity</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="p">(</span> <span class="p">(</span><span class="n">wav</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">intensity</span>
-
-<span class="k">def</span> <span class="nf">scattering</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.45</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    b is  proportionate  to  the  column  density  of  aerosols  </span>
-<span class="sd">    along  the  path  of  sunlight,  from  outside  the  atmosphere </span>
-<span class="sd">    to  the  point  of  observation</span>
-<span class="sd">    </span>
-<span class="sd">    N_O3  is  the  ozone  column  density  along  the  path  of  sunlight,  </span>
-<span class="sd">    sigma_O3 is  the  wavelength dependent ozone absorption cross-section.</span>
-<span class="sd">    </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># converting wav in µm:</span>
-    <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a</span><span class="o">/</span><span class="p">((</span><span class="n">wav</span><span class="o">/</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span><span class="p">))</span> <span class="c1"># Rayleigh extinction by nitrogen</span>
-    <span class="n">intensity</span> <span class="o">*=</span> <span class="p">(</span><span class="n">wav</span><span class="o">/</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">**-</span><span class="mi">4</span>
-    <span class="n">intensity</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">/</span><span class="p">((</span><span class="n">wav</span><span class="o">/</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">**</span><span class="n">p</span><span class="p">))</span> <span class="c1"># Aerosols</span>
-    <span class="k">return</span> <span class="n">intensity</span>
 </pre></div>
 
      </div>
@@ -15052,7 +15063,7 @@ a.anchor-link {
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Doing </span><span class="si">{</span><span class="n">wave_videoname</span><span class="si">}{</span><span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">wave</span><span class="p">()</span>
     <span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">anim_save</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">wave_videoname</span><span class="p">)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">wave_videoname</span><span class="si">}{</span><span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">wave_videoname</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
      </div>
