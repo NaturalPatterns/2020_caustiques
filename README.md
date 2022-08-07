@@ -1,6 +1,6 @@
 # caustiques (2020) / iridiscence (2022)
 
-* This repository presents 2 succesive projects
+* This repository https://github.com/NaturalPatterns/2020_caustiques presents 2 succesive projects
   1. One where I developped a modelling of caustics produced by shallow water and which are detailed in https://laurentperrinet.github.io/sciblog/posts/2020-06-19-caustic-optics.html
   2. Another, where I build upon that work to decompose the spectrum of light into its different wavelength, producing *iridescent caustics*.
  * Rendering of the [full notebook](https://naturalpatterns.github.io/2020_caustiques/) in which I explore the role of different parameters in prouding the images.
