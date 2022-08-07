@@ -5,7 +5,7 @@ JN=$(J) --to notebook --inplace
 #JN=$(J) --to markdown --stdout
 
 
-default: run html github
+default: html github
 
 run:
 	$(JN) $(TAG).ipynb
