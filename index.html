@@ -14260,7 +14260,17 @@ a.anchor-link {
 %autoreload 2
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Caustics">Caustics<a class="anchor-link" href="#Caustics">&#182;</a></h1><p><a href="https://zenodo.org/badge/latestdoi/273226625"><img src="https://zenodo.org/badge/273226625.svg" alt="DOI"></a></p>
+<h1 id="caustiques-(2020)-/-iridiscence-(2022)">caustiques (2020) / iridiscence (2022)<a class="anchor-link" href="#caustiques-(2020)-/-iridiscence-(2022)">&#182;</a></h1><ul>
+<li>This repository presents 2 succesive projects<ol>
+<li>One where I developped a modelling of caustics produced by shallow water and which are detailed in <a href="https://laurentperrinet.github.io/sciblog/posts/2020-06-19-caustic-optics.html">https://laurentperrinet.github.io/sciblog/posts/2020-06-19-caustic-optics.html</a></li>
+<li>Another, where I build upon that work to decompose the spectrum of light into its different wavelength, producing <em>iridescent caustics</em>.</li>
+</ol>
+<ul>
+<li>Rendering of the <a href="https://naturalpatterns.github.io/2020_caustiques/">full notebook</a> in which I explore the role of different parameters in prouding the images.</li>
+</ul>
+</li>
+</ul>
+<h2 id="caustiques-(2020)">caustiques (2020)<a class="anchor-link" href="#caustiques-(2020)">&#182;</a></h2><p><a href="https://zenodo.org/badge/latestdoi/273226625"><img src="https://zenodo.org/badge/273226625.svg" alt="DOI"></a></p>
 <p>Caustics (<a href="https://en.wikipedia.org/wiki/Caustic_(optics">wikipedia</a>)) are luminous patterns which are resulting from the superposition of smoothly deviated light rays. It is the heart-shaped pattern in your cup of coffee which is formed as the rays of from the sun are reflected on the cup's surface. It is also the wiggly patterns of light that you will see on the floor of a pool as the sun's light is <em>refracted</em> at the surface of the water. Here we will simulate this particular physical phenomenon. Simply because they are mesmerizingly beautiful, but also as it is of interest in visual neuroscience. Indeed, it speaks to how images are formed (more on this later), hence how the brain may understand images.</p>
 <p>In <a href="https://laurentperrinet.github.io/sciblog/posts/2020-06-19-caustic-optics.html">this post</a>, I have developed a simple formalism to generate such patterns, with the paradoxical result that it is <em>very</em> simple to code yet generates patterns with great complexity, such as:</p>
 <p><BR></p>
@@ -14270,69 +14280,30 @@ a.anchor-link {
 <BR>
 
 <p>This is joint work with artist <a href="https://laurentperrinet.github.io/authors/etienne-rey/">Etienne Rey</a>, in which I especially follow the ideas put forward in the series <a href="http://ondesparalleles.org/projets/turbulences/">Turbulence</a>.</p>
+<h2 id="iridiscence-(2022)">iridiscence (2022)<a class="anchor-link" href="#iridiscence-(2022)">&#182;</a></h2><p>Upon further observation, one may discover that caustics exhibit some <a href="https://en.wikipedia.org/wiki/Iridescence">iridescence</a>$^\ddagger$, that is, that the light pattern which forms the waggling lines of the caustics may decompose into different colors, forming evanescent rainbows. Here, we will simply use a modulation of the <a href="https://en.wikipedia.org/wiki/Snell&#39;s_law">Snell-Descartes law</a> that we used to compute different angle of refraction. This will be put in relation with the dependance of the refraction index with the wavelength of light and the transformation of a <a href="https://github.com/laurentperrinet/lambda2color">monochromatic light into RGB</a> that we used in a previous post about <a href="https://laurentperrinet.github.io/sciblog/posts/2020-07-04-colors-of-the-sky.html">colors of the sky</a>. The results are close to subjective observations, with the surprising (to me) observation that colors appear more <em>between</em> nodes...</p>
+<p><BR></p>
+<p><center>
+<img src="iridiscence.mp4" width="100%"/>
+</center></p>
+<BR>
+
+<p>Note: $\ddagger$ I use the term iridescence which is improper in the physical sense as it rather concerns the property of an object to exhibit different colors depending on the angle of view. However, in the perspective of the work with <a href="https://laurentperrinet.github.io/authors/etienne-rey/">Etienne Rey</a> it resonates with our endeavour to show that percepetion, in particular visual perception, is an active process of the observer within its environment.</p>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="installation">installation<a class="anchor-link" href="#installation">&#182;</a></h2>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">pip</span> install --upgrade -r requirements.txt
-</pre></div>
+<h2 id="installation">installation<a class="anchor-link" href="#installation">&#182;</a></h2><p>Install <a href="https://pip.pypa.io/en/stable/user_guide/#requirements-files">dependencies</a>, then this library:</p>
 
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre><span class="ansi-yellow-fg">DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at https://github.com/Homebrew/homebrew-core/issues/76621</span><span class="ansi-yellow-fg">
-</span>Requirement already satisfied: pip in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 4)) (22.2.2)
-Requirement already satisfied: matplotlib in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 5)) (3.5.2)
-Requirement already satisfied: numpy in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 6)) (1.23.1)
-Requirement already satisfied: MotionClouds in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 7)) (20200212)
-Requirement already satisfied: imageio in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 8)) (2.21.0)
-Requirement already satisfied: pygifsicle in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 9)) (1.0.5)
-Requirement already satisfied: lambda2color in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 10)) (1.0)
-Requirement already satisfied: pyparsing&gt;=2.2.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.4.7)
-Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (0.10.0)
-Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (20.9)
-Requirement already satisfied: python-dateutil&gt;=2.7 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.8.2)
-Requirement already satisfied: pillow&gt;=6.2.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (9.0.1)
-Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (4.30.0)
-Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (1.3.1)
-Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (from cycler&gt;=0.10-&gt;matplotlib-&gt;-r requirements.txt (line 5)) (1.16.0)
-<span class="ansi-yellow-fg">DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at https://github.com/Homebrew/homebrew-core/issues/76621</span><span class="ansi-yellow-fg">
-</span>Note: you may need to restart the kernel to use updated packages.
-</pre>
-</div>
-</div>
+<pre><code>python3 -m pip install -r requirements.txt
+python3 -m pip install -e .</code></pre>
+<h2 id="exploring-more">exploring more<a class="anchor-link" href="#exploring-more">&#182;</a></h2><p>Launch <a href="https://jupyter.org/">jupyter</a> and open the notebook.</p>
 
 </div>
-
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">figpath</span> <span class="o">=</span> <span class="s1">&#39;2022-07-30_caustique&#39;</span>
@@ -14346,7 +14317,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
@@ -14367,7 +14338,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -14663,7 +14634,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Saving our simulations in=</span><span class="si">{</span><span class="n">figpath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -14698,7 +14669,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">init</span><span class="p">()</span>
@@ -14713,7 +14684,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">opt</span>
@@ -14732,7 +14703,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 
 
 
@@ -14760,7 +14731,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">Caustique</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
@@ -14819,7 +14790,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">Caustique</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
@@ -14852,7 +14823,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
 
 
 
@@ -14870,7 +14841,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">videoname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">opt</span><span class="o">.</span><span class="n">figpath</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">opt</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">opt</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -14888,7 +14859,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">videoname</span><span class="p">)</span>
@@ -14929,7 +14900,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">N_scan</span> <span class="o">=</span> <span class="mi">9</span>
@@ -14944,7 +14915,7 @@ Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (fr
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">init</span><span class="p">()</span>
@@ -15220,7 +15191,7 @@ H = 12.000
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">init</span><span class="p">()</span>
@@ -15494,7 +15465,7 @@ variation = 0.599
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;sf_0&#39;</span><span class="p">,</span> <span class="s1">&#39;B_sf&#39;</span><span class="p">,</span> <span class="s1">&#39;B_theta&#39;</span><span class="p">,</span> <span class="s1">&#39;V_X&#39;</span><span class="p">,</span> <span class="s1">&#39;B_V&#39;</span><span class="p">]:</span> <span class="c1">#  &#39;theta&#39;, &#39;V_Y&#39;</span>
@@ -16938,6 +16909,58 @@ B_V=B_V(default)*2.000=8.000E+00
 <video  loop="1" autoplay="1" controls  src="2022-07-30_caustique/caustique_B_V_modul_2.000.mp4" type="video/mp4" width=1024\>
 </div>
 
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">pip</span> install --upgrade -r requirements.txt
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre><span class="ansi-yellow-fg">DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at https://github.com/Homebrew/homebrew-core/issues/76621</span><span class="ansi-yellow-fg">
+</span>Requirement already satisfied: pip in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 4)) (22.2.2)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 5)) (3.5.2)
+Requirement already satisfied: numpy in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 6)) (1.23.1)
+Requirement already satisfied: MotionClouds in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 7)) (20200212)
+Requirement already satisfied: imageio in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 8)) (2.21.0)
+Requirement already satisfied: pygifsicle in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 9)) (1.0.5)
+Requirement already satisfied: lambda2color in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 10)) (1.0)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (1.3.1)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (4.30.0)
+Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (20.9)
+Requirement already satisfied: pillow&gt;=6.2.0 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (9.0.1)
+Requirement already satisfied: pyparsing&gt;=2.2.1 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.4.7)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (0.10.0)
+Requirement already satisfied: python-dateutil&gt;=2.7 in /usr/local/lib/python3.9/site-packages (from matplotlib-&gt;-r requirements.txt (line 5)) (2.8.2)
+Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (from cycler&gt;=0.10-&gt;matplotlib-&gt;-r requirements.txt (line 5)) (1.16.0)
+<span class="ansi-yellow-fg">DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at https://github.com/Homebrew/homebrew-core/issues/76621</span><span class="ansi-yellow-fg">
+</span>Note: you may need to restart the kernel to use updated packages.
+</pre>
+</div>
 </div>
 
 </div>
