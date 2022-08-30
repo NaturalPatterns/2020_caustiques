@@ -4,6 +4,7 @@
 pip
 matplotlib
 numpy
+scipy
 MotionClouds
 imageio
 pygifsicle
