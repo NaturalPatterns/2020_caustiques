@@ -1,4 +1,4 @@
-TAG=2022-08-30_caustique
+TAG=2022-09-02_caustique
 J=jupyter nbconvert  --ExecutePreprocessor.timeout=0 --allow-errors --execute
 # J=jupyter nbconvert  --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=0 --allow-errors --execute
 JN=$(J) --to notebook --inplace
