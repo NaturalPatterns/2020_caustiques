@@ -14651,42 +14651,9 @@ a.anchor-link {
 
         <span class="k">return</span> <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span>
 
-    <span class="k">def</span> <span class="nf">do_raytracing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cachepath</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s1">_hist.npy&#39;</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-            <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_dens</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">ny</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_dens</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">multispectral</span><span class="p">:</span>
-                <span class="n">N_wavelengths</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs_srgb</span><span class="o">.</span><span class="n">cmf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
-
-                <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">,</span> <span class="n">N_wavelengths</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">ii_wavelength</span><span class="p">,</span> <span class="n">i_wavelength</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_wavelengths</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span><span class="p">)):</span>
-                    <span class="n">modulation</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">variation</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">variation</span><span class="o">*</span><span class="n">i_wavelength</span><span class="o">/</span><span class="n">N_wavelengths</span>
-                    <span class="c1"># print(i_wavelength, N_wavelengths, modulation)</span>
-                    <span class="k">for</span> <span class="n">i_frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">):</span>
-                        <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">z</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i_frame</span><span class="p">],</span> <span class="n">modulation</span><span class="o">=</span><span class="n">modulation</span><span class="p">)</span>
-                        <span class="n">hist_</span><span class="p">,</span> <span class="n">edge_x</span><span class="p">,</span> <span class="n">edge_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">xv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
-                                                               <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">],</span>
-                                                               <span class="nb">range</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">]],</span>
-                                                               <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                        <span class="n">hist</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i_frame</span><span class="p">,</span> <span class="n">ii_wavelength</span><span class="p">]</span> <span class="o">=</span> <span class="n">hist_</span>
-                <span class="n">hist</span> <span class="o">/=</span> <span class="n">hist</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">i_frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">):</span>
-                    <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">z</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i_frame</span><span class="p">])</span>
-                    <span class="n">hist_</span><span class="p">,</span> <span class="n">edge_x</span><span class="p">,</span> <span class="n">edge_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">xv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
-                                                           <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">],</span>
-                                                           <span class="nb">range</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">]],</span>
-                                                           <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="c1">#hist /= hist.max()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hist</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">hist</span>
-
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">do_color</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">videoname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-        <span class="n">hist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_raytracing</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="c1">#hist = self.do_raytracing(z)</span>
+        <span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_dens</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">ny</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_dens</span>
 
         <span class="k">if</span> <span class="n">videoname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">videoname</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">figpath</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -14696,25 +14663,41 @@ a.anchor-link {
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">multispectral</span><span class="p">:</span>
             <span class="n">N_wavelengths</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs_srgb</span><span class="o">.</span><span class="n">cmf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
             <span class="c1"># multiply by the spectrum of the sky</span>
-            <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">wavelengths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs_srgb</span><span class="o">.</span><span class="n">cmf</span><span class="p">[::</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e-9</span>
-                <span class="n">intensity5800</span> <span class="o">=</span> <span class="n">planck</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mf">5800.</span><span class="p">)</span>
-                <span class="n">scatter</span> <span class="o">=</span> <span class="n">scattering</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
-                <span class="n">spectrum_sky</span> <span class="o">=</span> <span class="n">intensity5800</span> <span class="o">*</span> <span class="n">scatter</span>
-                <span class="n">hist</span> <span class="o">=</span> <span class="n">hist</span> <span class="o">*</span> <span class="n">spectrum_sky</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-                <span class="n">hist</span> <span class="o">/=</span> <span class="n">hist</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">wavelengths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs_srgb</span><span class="o">.</span><span class="n">cmf</span><span class="p">[::</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e-9</span>
+            <span class="n">intensity5800</span> <span class="o">=</span> <span class="n">planck</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mf">5800.</span><span class="p">)</span>
+            <span class="n">scatter</span> <span class="o">=</span> <span class="n">scattering</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+            <span class="n">spectrum_sky</span> <span class="o">=</span> <span class="n">intensity5800</span> <span class="o">*</span> <span class="n">scatter</span>
 
             <span class="c1">#image_rgb = self.cs_srgb.spec_to_rgb(hist)</span>
             <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_dens</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">ny</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_dens</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">ii_wavelength</span><span class="p">,</span> <span class="n">i_wavelength</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_wavelengths</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span><span class="p">)):</span>
-                <span class="n">spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_wavelengths</span><span class="p">))</span>
-                <span class="n">spec</span><span class="p">[</span><span class="n">i_wavelength</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">rgb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs_srgb</span><span class="o">.</span><span class="n">spec_to_rgb</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
-                <span class="n">image_rgb</span> <span class="o">+=</span> <span class="n">hist</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="n">ii_wavelength</span><span class="p">]</span> <span class="o">*</span> <span class="n">rgb</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i_frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">):</span>
+                <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">,</span> <span class="n">N_wavelengths</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">ii_wavelength</span><span class="p">,</span> <span class="n">i_wavelength</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_wavelengths</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">bin_spectrum</span><span class="p">)):</span>
+                    <span class="n">modulation</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">variation</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">variation</span><span class="o">*</span><span class="n">i_wavelength</span><span class="o">/</span><span class="n">N_wavelengths</span>
+                    <span class="c1"># print(i_wavelength, N_wavelengths, modulation)</span>
+                    <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">z</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i_frame</span><span class="p">],</span> <span class="n">modulation</span><span class="o">=</span><span class="n">modulation</span><span class="p">)</span>
+                    <span class="n">hist_</span><span class="p">,</span> <span class="n">edge_x</span><span class="p">,</span> <span class="n">edge_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">xv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                                                           <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">],</span>
+                                                           <span class="nb">range</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">]],</span>
+                                                           <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_wavelengths</span><span class="p">))</span>
+                    <span class="n">spec</span><span class="p">[</span><span class="n">i_wavelength</span><span class="p">]</span> <span class="o">=</span> <span class="n">spectrum_sky</span><span class="p">[</span><span class="n">i_wavelength</span><span class="p">]</span>
+                    <span class="n">rgb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs_srgb</span><span class="o">.</span><span class="n">spec_to_rgb</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+                    
+                    <span class="n">image_rgb</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">i_frame</span><span class="p">]</span> <span class="o">+=</span> <span class="n">hist</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">rgb</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
 
             <span class="c1"># image_rgb -= image_rgb.min()</span>
             <span class="n">image_rgb</span> <span class="o">/=</span> <span class="n">image_rgb</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i_frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">):</span>
+                <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">z</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i_frame</span><span class="p">])</span>
+                <span class="n">hist_</span><span class="p">,</span> <span class="n">edge_x</span><span class="p">,</span> <span class="n">edge_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">xv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                                                       <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">binsx</span><span class="p">,</span> <span class="n">binsy</span><span class="p">],</span>
+                                                       <span class="nb">range</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">]],</span>
+                                                       <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1">#hist /= hist.max()</span>
+            
 
         <span class="n">fnames</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i_frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">nframe</span><span class="p">):</span>
@@ -14791,7 +14774,7 @@ a.anchor-link {
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Doing </span><span class="si">{</span><span class="n">wave_videoname</span><span class="si">}{</span><span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">wave</span><span class="p">()</span>
     <span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">anim_save</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">wave_videoname</span><span class="p">)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">wave_videoname</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">wave_videoname</span><span class="si">}{</span><span class="n">c</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14812,18 +14795,6 @@ a.anchor-link {
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>2022-08-30_caustique
-Doing 2022-08-30_caustique/caustique_wave.mp4
-ffmpeg version 5.1 Copyright (c) 2000-2022 the FFmpeg developers
-built with Apple clang version 13.1.6 (clang-1316.0.21.2.5)
-configuration: --prefix=/usr/local/Cellar/ffmpeg/5.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libbluray --enable-libdav1d --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox
-libavutil      57. 28.100 / 57. 28.100
-libavcodec     59. 37.100 / 59. 37.100
-libavformat    59. 27.100 / 59. 27.100
-libavdevice    59.  7.100 / 59.  7.100
-libavfilter     8. 44.100 /  8. 44.100
-libswscale      6.  7.100 /  6.  7.100
-libswresample   4.  7.100 /  4.  7.100
-libpostproc    56.  6.100 / 56.  6.100
 </pre>
 </div>
 </div>
@@ -14836,7 +14807,7 @@ libpostproc    56.  6.100 / 56.  6.100
 
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique_wave..mp4" type="video/mp4" width=1024\>
+<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique_wave.mp4" type="video/mp4" width=1024\>
 </div>
 
 </div>
@@ -14853,7 +14824,7 @@ libpostproc    56.  6.100 / 56.  6.100
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">Caustique</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
@@ -14883,28 +14854,14 @@ libpostproc    56.  6.100 / 56.  6.100
 </div>
 </div>
 
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>(1024, 1024, 640)</pre>
 </div>
 
 </div>
 
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">videoname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">opt</span><span class="o">.</span><span class="n">figpath</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">opt</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">opt</span><span class="o">.</span><span class="n">vext</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -14919,31 +14876,10 @@ libpostproc    56.  6.100 / 56.  6.100
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>2022-08-30_caustique
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">videoname</span><span class="p">)</span>
@@ -14954,28 +14890,6 @@ libpostproc    56.  6.100 / 56.  6.100
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique.mp4" type="video/mp4" width=1024\>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -14984,7 +14898,7 @@ libpostproc    56.  6.100 / 56.  6.100
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">N_scan</span> <span class="o">=</span> <span class="mi">9</span>
@@ -14996,7 +14910,12 @@ libpostproc    56.  6.100 / 56.  6.100
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="water-depth">water depth<a class="anchor-link" href="#water-depth">&#182;</a></h2>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
@@ -15028,133 +14947,11 @@ libpostproc    56.  6.100 / 56.  6.100
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>2022-08-30_caustique
-2022-08-30_caustique
-H = 3.000
-</pre>
 </div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="refraction-index-variation">refraction index variation<a class="anchor-link" href="#refraction-index-variation">&#182;</a></h2>
 </div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique_H_3.000.mp4" type="video/mp4" width=1024\>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>2022-08-30_caustique
-H = 3.568
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique_H_3.568.mp4" type="video/mp4" width=1024\>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>2022-08-30_caustique
-H = 4.243
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique_H_4.243.mp4" type="video/mp4" width=1024\>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>2022-08-30_caustique
-H = 5.045
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<video  loop="1" autoplay="1" controls  src="2022-08-30_caustique/caustique_H_5.045.mp4" type="video/mp4" width=1024\>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>2022-08-30_caustique
-H = 6.000
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
@@ -15185,13 +14982,18 @@ H = 6.000
 </div>
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="other-variables">other variables<a class="anchor-link" href="#other-variables">&#182;</a></h2>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;B_sf&#39;</span><span class="p">,</span> <span class="s1">&#39;B_theta&#39;</span><span class="p">,</span> <span class="s1">&#39;V_X&#39;</span><span class="p">,</span> <span class="s1">&#39;B_V&#39;</span><span class="p">]:</span> <span class="c1">#  &#39;theta&#39;, &#39;V_Y&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;B_sf&#39;</span><span class="p">,</span> <span class="s1">&#39;B_theta&#39;</span><span class="p">,</span> <span class="s1">&#39;V_X&#39;</span><span class="p">,</span> <span class="s1">&#39;B_V&#39;</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="p">]:</span> <span class="c1">#  &#39;theta&#39;, &#39;V_Y&#39;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;======</span><span class="si">{</span><span class="n">variable</span><span class="si">}</span><span class="s1">======&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">modul</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N_scan</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">):</span>
         <span class="n">opt</span> <span class="o">=</span> <span class="n">init</span><span class="p">()</span>
