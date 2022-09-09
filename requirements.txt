@@ -7,5 +7,11 @@ numpy
 scipy
 MotionClouds
 imageio
+imageio-ffmpeg
 pygifsicle
 lambda2color
+tqdm
+jupyter
+ipywidgets
+nbconvert
+moviepy
