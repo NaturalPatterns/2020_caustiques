@@ -17,7 +17,7 @@ github:
 	git pull; git commit -am"$(TAG)" ; git push
 
 mp4:
-	cp $(TAG)_caustique/caustique.mp4 iridiscence.mp4
+	cp $(TAG)/caustique.mp4 iridiscence.mp4
 
 install_local:
 	python3 -m pip install --upgrade --user -r requirements.txt
