@@ -8,7 +8,10 @@ JN=$(J) --to notebook --inplace
 default: html github
 
 run:
-	$(JN) $(TAG).ipynb
+	$(JN) 2024-07-25_caustique.ipynb
+	$(JN) 2024-08-29_caustique-bands.ipynb
+	$(JN) 2024-10-07_caustique-bands.ipynb
+	# $(JN) $(TAG).ipynb
 
 html:
 	jupyter-nbconvert $(TAG).ipynb --to html --output index.html
