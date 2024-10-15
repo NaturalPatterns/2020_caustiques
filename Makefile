@@ -1,4 +1,4 @@
-TAG=2022-09-09_caustique
+TAG=2024-07-25_caustique
 J=jupyter nbconvert  --ExecutePreprocessor.timeout=0 --allow-errors --execute
 # J=jupyter nbconvert  --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=0 --allow-errors --execute
 JN=$(J) --to notebook --inplace
@@ -8,10 +8,8 @@ JN=$(J) --to notebook --inplace
 default: html github
 
 run:
-	$(JN) 2024-07-25_caustique.ipynb
-	$(JN) 2024-08-29_caustique-bands.ipynb
-	$(JN) 2024-10-07_caustique-bands.ipynb
-	# $(JN) $(TAG).ipynb
+	# $(JN) 2024-10-07_caustique-bands.ipynb
+	$(JN) $(TAG).ipynb
 
 html:
 	jupyter-nbconvert $(TAG).ipynb --to html --output index.html
