@@ -40,7 +40,7 @@ class init:
     cache: bool = True # Cache intermediate output.
     verbose: bool = True # Displays more verbose output.
     do_display: bool = False # Displays images in notebook.
-    do_recompute: bool = True # Restart each computation    
+    do_recompute: bool = False # Restart each computation    
 
 
 from lambda2color import Lambda2color, xyz_from_xy
