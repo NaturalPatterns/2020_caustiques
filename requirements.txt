@@ -16,3 +16,4 @@ jupyter
 ipywidgets
 nbconvert
 moviepy
+ipynbname
