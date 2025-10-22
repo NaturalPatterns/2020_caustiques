@@ -6,9 +6,9 @@ matplotlib
 numpy
 scipy
 MotionClouds
-imageio
+imageio[pyav]
 opencv-python
-imageio-ffmpeg
+# imageio-ffmpeg
 pygifsicle
 lambda2color
 tqdm
