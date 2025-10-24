@@ -12,6 +12,7 @@ opencv-python
 pygifsicle
 lambda2color
 tqdm
+tqdm_joblib
 jupyter
 ipywidgets
 nbconvert
