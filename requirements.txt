@@ -5,6 +5,7 @@ pip
 matplotlib
 numpy
 scipy
+joblib
 MotionClouds
 imageio[pyav]
 opencv-python
@@ -12,7 +13,7 @@ opencv-python
 pygifsicle
 lambda2color
 tqdm
-tqdm_joblib
+# tqdm_joblib
 jupyter
 ipywidgets
 nbconvert
