@@ -6,7 +6,7 @@ matplotlib
 numpy
 scipy
 joblib
-MotionClouds
+# MotionClouds - it is imported as a file
 imageio[pyav]
 opencv-python
 # imageio-ffmpeg
